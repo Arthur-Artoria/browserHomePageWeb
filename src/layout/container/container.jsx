@@ -7,7 +7,7 @@ export class Container extends Component {
   }
 
   render() {
-    const bj = require('../../assets/images/dev-bj.jpg');
+    const bj = require(`../../assets/images/background/15.jpg`);
     return (
       <div id="container" className="bg" style={ { 'backgroundImage': `url(${bj})` } } >
         { this.props.children }
