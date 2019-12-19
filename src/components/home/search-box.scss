@@ -1,0 +1,16 @@
+#search-box {
+  width: 348px;
+  .search-box {
+    &__inner {
+      padding: 0.15em 0;
+      width: 100%;
+      font-size: 1.1em;
+      color: #fff;
+      text-align: center;
+      outline: none;
+      border: 0;
+      border-bottom: 3px solid hsla(0, 0%, 100%, 0.85);
+      background-color: transparent;
+    }
+  }
+}
