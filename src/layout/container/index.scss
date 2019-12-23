@@ -2,4 +2,10 @@
   width: 100vw;
   height: 100vh;
   transition: background-image 8s;
+  .container {
+    &-inner {
+      position: relative;
+      z-index: 1;
+    }
+  }
 }
