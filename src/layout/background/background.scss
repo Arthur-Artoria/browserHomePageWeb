@@ -1,0 +1,29 @@
+#background {
+  .back {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 18s;
+    &.activeBack {
+      opacity: 1;
+    }
+  }
+  .back1 {
+    opacity: 1;
+    animation: fade-in-out-in 16s infinite both;
+  }
+  @keyframes fade-in-out-in {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
