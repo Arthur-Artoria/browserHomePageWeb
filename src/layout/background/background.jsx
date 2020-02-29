@@ -1,13 +1,12 @@
-import React, { Component } from 'react'
-import './background.scss'
+import React, { Component } from 'react';
+import './background.scss';
 import Image from './image';
 export class Background extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      activeImageIndex: 0,  // 激活显示的图片在随机列表中的下标值
-    }
+      activeImageIndex: 0 // 激活显示的图片在随机列表中的下标值
+    };
     this.setRandomBackground = this.setRandomBackground.bind(this);
     this.setBackground();
   }
@@ -23,11 +22,15 @@ export class Background extends Component {
       const nextActiveImageIndex = this.state.activeImageIndex === 0 ? 1 : 0;
       this.setState({ activeImageIndex: nextActiveImageIndex });
     }, 2000);
-    this.randomBackTimer = setInterval(this.setRandomBackground, 20000, this.imgList);
+    this.randomBackTimer = setInterval(
+      this.setRandomBackground,
+      20000,
+      this.imgList
+    );
   }
 
   componentWillUnmount() {
-    clearInterval(this.randomBackTimer)
+    clearInterval(this.randomBackTimer);
   }
 
   /**
@@ -92,22 +95,28 @@ export class Background extends Component {
    */
   setBackClassName(isActive) {
     const defaultClassName = 'back bg';
-    return isActive ? `activeBack ${defaultClassName}` : defaultClassName
+    return isActive ? `activeBack ${defaultClassName}` : defaultClassName;
   }
 
   render() {
     const { activeImageIndex } = this.state;
-    console.log(activeImageIndex);
     const [first, second] = this.randomImageList;
     return (
-      <div id="background" >
+      <div id="background">
+        {/* 背景1 */}
+        <Image
+          imageName={first}
+          imgList={this.imgList}
+          isActive={activeImageIndex === 0}
+        />
 
-        {/* 背景1 */ }
-        <Image imageName={ first } imgList={ this.imgList } isActive={ activeImageIndex === 0 } />
-
-        {/* 背景2 */ }
-        <Image imageName={ second } imgList={ this.imgList } isActive={ activeImageIndex === 1 } />
-      </div >
-    )
+        {/* 背景2 */}
+        <Image
+          imageName={second}
+          imgList={this.imgList}
+          isActive={activeImageIndex === 1}
+        />
+      </div>
+    );
   }
 }

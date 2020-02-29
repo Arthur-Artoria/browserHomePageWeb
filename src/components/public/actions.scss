@@ -1,0 +1,25 @@
+#actions {
+  display: flex;
+  position: absolute;
+  padding: 5px;
+  left: 10px;
+  top: 10px;
+  z-index: 2;
+  border-radius: 50%;
+  transition: background-color 0.3s ease-in;
+  &:hover {
+    background-color: #fff;
+    .actions {
+      &-icon {
+        color: #000;
+      }
+    }
+  }
+  .actions {
+    &-icon {
+      color: #fff;
+      cursor: pointer;
+      transition: color 0.3s ease-in;
+    }
+  }
+}

@@ -1,13 +1,15 @@
 #home-time {
   text-align: center;
-  color: #fff;
+  font-size: 28px;
   .home-time {
     &__time {
       font-size: 4em;
+      color: #fff;
     }
     &__tip {
       margin: 0.5em;
       font-size: 2em;
+      color: #fff;
     }
   }
 }

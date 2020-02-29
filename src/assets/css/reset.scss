@@ -169,11 +169,23 @@ body {
   font-family: 'Roboto', 'Arial', 'Microsoft YaHei', '黑体', '宋体', '微软雅黑',
     sans-serif;
 }
-
+html {
+  body {
+    line-height: normal;
+  }
+}
 body {
   line-height: 1;
   -webkit-text-size-adjust: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
 }
 
 /*清除浮动*/

@@ -1,0 +1,9 @@
+#bookmark-list {
+  position: absolute;
+  bottom: 10%;
+  .bookmark {
+    &-cover {
+      font-size: 26px;
+    }
+  }
+}

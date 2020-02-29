@@ -1,13 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import day from 'dayjs';
-import './time.scss'
+import './time.scss';
 export class Time extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       time: day()
-    }
+    };
 
     this.setTimeRush();
   }
@@ -20,7 +19,7 @@ export class Time extends Component {
     setInterval(() => {
       this.setState({
         time: day()
-      })
+      });
     }, sleep);
   }
 
@@ -43,28 +42,22 @@ export class Time extends Component {
       case 0:
         return '晚安';
       case 1:
-        return '上午好'
+        return '上午好';
       case 2:
-        return '下午好'
+        return '下午好';
       default:
         return '晚上好';
     }
   }
 
-
   render() {
-
     return (
       <section id="home-time">
-        <h1 className="home-time__time">
-          { this.getFormatTime() }
-        </h1>
-        <h2 className="home-time__tip">
-          { this.getTip() }
-        </h2>
+        <h1 className="home-time__time">{this.getFormatTime()}</h1>
+        <h2 className="home-time__tip">{this.getTip()}</h2>
       </section>
-    )
+    );
   }
 }
 
-export default Time
+export default Time;
