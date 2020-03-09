@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './actions.scss';
-import { SettingModal } from './setting-modal';
+import { SettingModalContainer } from './setting-modal';
 import { LoginModal } from './login-modal';
 
 export class Actions extends Component {
@@ -64,7 +64,7 @@ export class Actions extends Component {
         {this.renderActionList()}
 
         {/* 设置 对话框 */}
-        <SettingModal
+        <SettingModalContainer
           onVisibleChange={this.controlModal.bind(this, 'setting')}
           visible={this.state.actionList.setting.isVisibleModal}
         />

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, message } from 'antd';
+import { Login } from '../../assets/js/api';
 
 /**
  * * 表单
@@ -9,7 +10,7 @@ const LoginForm = Form.create({ name: 'BookmarkCreateForm' })(
     formItemList = [
       {
         label: '账号',
-        option: 'account',
+        option: 'username',
         rules: [
           {
             required: true,
@@ -20,6 +21,7 @@ const LoginForm = Form.create({ name: 'BookmarkCreateForm' })(
       {
         label: '密码',
         option: 'password',
+        type: 'password',
         rules: [
           {
             required: true,
@@ -33,11 +35,13 @@ const LoginForm = Form.create({ name: 'BookmarkCreateForm' })(
       const { form } = this.props;
       const { getFieldDecorator } = form;
 
-      return this.formItemList.map(({ label, option, rules }, index) => (
-        <Form.Item key={index} label={label}>
-          {getFieldDecorator(option, { rules })(<Input />)}
-        </Form.Item>
-      ));
+      return this.formItemList.map(
+        ({ label, option, rules, type = 'text' }, index) => (
+          <Form.Item key={index} label={label}>
+            {getFieldDecorator(option, { rules })(<Input type={type} />)}
+          </Form.Item>
+        )
+      );
     }
 
     render() {
@@ -62,21 +66,22 @@ export class LoginModal extends Component {
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) return;
-      this.saveBookmark(values);
-      form.resetFields();
-      this.controlModal(false);
+      this.login(values);
+      // form.resetFields();
+      // this.controlModal(false);
     });
   };
 
   /**
-   * * 缓存书签数据
-   * @param {object} bookmark 新增的书签数据
+   * * 登录
+   * @param {object} formData 登录数据
    */
-  saveBookmark(bookmark) {
-    const bookmarkList = JSON.parse(localStorage.getItem('bookmarkList')) || [];
-    bookmarkList.push(bookmark);
-    localStorage.setItem('bookmarkList', JSON.stringify(bookmarkList));
-    message.success('保存书签成功！');
+  login({ username, password }) {
+    Login(username, password).then(({ access_token }) => {
+      message.success('登录成功！');
+      localStorage.setItem('access_token', access_token);
+      window.location.reload();
+    });
   }
 
   saveFormRef = formRef => {

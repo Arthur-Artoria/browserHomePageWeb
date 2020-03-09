@@ -22,11 +22,12 @@ export class Background extends Component {
       const nextActiveImageIndex = this.state.activeImageIndex === 0 ? 1 : 0;
       this.setState({ activeImageIndex: nextActiveImageIndex });
     }, 2000);
-    this.randomBackTimer = setInterval(
-      this.setRandomBackground,
-      20000,
-      this.imgList
-    );
+
+    // this.randomBackTimer = setInterval(
+    //   this.setRandomBackground,
+    //   20000,
+    //   this.imgList
+    // );
   }
 
   componentWillUnmount() {

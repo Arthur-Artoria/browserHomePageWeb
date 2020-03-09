@@ -1,9 +1,36 @@
 #bookmark-list {
   position: absolute;
+  left: 50%;
   bottom: 10%;
+  transform: translateX(-50%);
   .bookmark {
+    margin: 0 10px;
     &-cover {
-      font-size: 26px;
+      font-size: 20px;
+    }
+  }
+}
+.bookmark {
+  &-popover {
+    position: relative;
+    padding-top: 15px;
+  }
+  &-name {
+    margin-bottom: 0;
+    font-size: 20px;
+  }
+  &-actions {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    &__icon {
+      padding: 3px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 3px;
+      &:hover {
+        background-color: #efefef;
+      }
     }
   }
 }

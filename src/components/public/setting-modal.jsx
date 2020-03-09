@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, message } from 'antd';
+import { SaveBookmark } from '../../assets/js/api';
+import { connect } from 'react-redux';
 
 /**
  * * 表单
@@ -47,6 +49,11 @@ const BookmarkCreateForm = Form.create({ name: 'BookmarkCreateForm' })(
 );
 
 export class SettingModal extends Component {
+  constructor(props, context) {
+    super(props);
+    console.log(props, context);
+  }
+
   /**
    * * 设置弹窗显示与否
    * @param {Boolean} isVisible 控制弹窗是否显示
@@ -73,9 +80,39 @@ export class SettingModal extends Component {
    * @param {object} bookmark 新增的书签数据
    */
   saveBookmark(bookmark) {
+    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      this.saveBookmarkDatabase(bookmark);
+    } else {
+      this.saveBookmarkLocal(bookmark);
+    }
+  }
+
+  /**
+   * * 将书签保存在本地缓存中去
+   * @param {object} bookmark 新增书签数据
+   */
+  saveBookmarkLocal(bookmark) {
     const bookmarkList = JSON.parse(localStorage.getItem('bookmarkList')) || [];
     bookmarkList.push(bookmark);
     localStorage.setItem('bookmarkList', JSON.stringify(bookmarkList));
+    this.saveSuccess(bookmark);
+  }
+
+  /**
+   * * 保存书签到数据库中去
+   */
+  saveBookmarkDatabase(bookmark) {
+    SaveBookmark(bookmark).then(res => {
+      this.saveSuccess(bookmark);
+    });
+  }
+
+  /**
+   * * 保存成功
+   */
+  saveSuccess(bookmark) {
+    this.props.dispatch({ type: 'PUSH_BOOKMARK', payload: bookmark });
     message.success('保存书签成功！');
   }
 
@@ -96,3 +133,5 @@ export class SettingModal extends Component {
     );
   }
 }
+
+export const SettingModalContainer = connect()(SettingModal);
