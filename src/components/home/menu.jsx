@@ -12,19 +12,29 @@ export class Menu extends Component {
   /**
    * * 初始化数据
    */
-  initData() {}
+  initData() {
+    this.getBookmarks();
+  }
 
   /**
    * * 获取书签列表
    */
-  getBookmarks() {
-    if (this.token) {
-      GetBookmarks().then(bookmarks => {
-        this.setState({ bookmarks: bookmarks });
-      });
+  async getBookmarks() {
+    let bookmarks = [];
+    if (this.props.token) {
+      bookmarks = await GetBookmarks();
     } else {
-      const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-      this.setState({ bookmarks: bookmarks });
+      bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    }
+    this.props.onInitBookmarks(bookmarks);
+  }
+
+  /**
+   *
+   */
+  componentDidUpdate(prevProps) {
+    if (this.props.token !== prevProps.token) {
+      this.initData();
     }
   }
 

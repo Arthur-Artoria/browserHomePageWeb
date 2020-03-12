@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Popover, message } from 'antd';
+import { Button, Popover, message, Popconfirm } from 'antd';
 import { DeleteBookmark } from '../../assets/js/api';
 import { connect } from 'react-redux';
 
 export class _Bookmark extends Component {
+  /**
+   * * 渲染书签名称
+   * @param {object} param 书签
+   */
   bookmarkPopoverContent({ name, id }) {
     return (
       <div className="bookmark-popover">
@@ -25,11 +29,13 @@ export class _Bookmark extends Component {
           className="material-icons bookmark-actions__icon">
           edit
         </i>
-        <i
-          onClick={this.handleDeleteClick.bind(this, id)}
-          className="material-icons bookmark-actions__icon">
-          delete
-        </i>
+        <Popconfirm
+          title="确定删除吗？"
+          okText="确定"
+          cancelText="取消"
+          onConfirm={this.handleDeleteClick.bind(this, id)}>
+          <i className="material-icons bookmark-actions__icon">delete</i>
+        </Popconfirm>
       </div>
     );
   }
@@ -53,7 +59,7 @@ export class _Bookmark extends Component {
         <Button
           href={href}
           size="large"
-          target="blank"
+          target="_blank"
           shape="circle"
           className="bookmark-cover">
           {name.slice(0, 1)}

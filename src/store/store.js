@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+import { initAxiosAuth } from '../assets/js/api';
 
 function reducer(state = { bookmarks: [] }, action) {
   const { bookmarks } = state;
@@ -11,9 +12,12 @@ function reducer(state = { bookmarks: [] }, action) {
       return Object.assign({}, state, { bookmarks: [...payload] })
     case 'DELETE_BOOKMARK':
       return Object.assign({}, state, { bookmarks: bookmarks.filter(({ id }) => id !== payload) })
+    case 'SET_TOKEN':
+      initAxiosAuth(payload)
+      return { ...state, token: payload }
     default:
       return state;
   }
 }
 
-export const store = createStore(reducer);
+export const store = createStore(reducer, { bookmarks: [], token: localStorage.getItem('access_token') });

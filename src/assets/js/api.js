@@ -1,7 +1,15 @@
 import { Axios as axios } from './axios';
 
-const AUTH_TOKEN = `Bearer ${localStorage.getItem('access_token')}`;
-axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+initAxiosAuth();
+
+/**
+ * * 初始化身份凭证
+ * @param {string} AUTH_TOKEN 身份凭证
+ */
+export function initAxiosAuth(AUTH_TOKEN) {
+  AUTH_TOKEN = `Bearer ${localStorage.getItem('access_token')}`;
+  axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+}
 
 /**
  * * 登录

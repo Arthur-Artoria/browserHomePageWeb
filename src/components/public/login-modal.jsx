@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, message } from 'antd';
 import { Login } from '../../assets/js/api';
+import { connect } from 'react-redux';
 
 /**
  * * 表单
@@ -50,7 +51,7 @@ const LoginForm = Form.create({ name: 'BookmarkCreateForm' })(
   }
 );
 
-export class LoginModal extends Component {
+export class _LoginModal extends Component {
   /**
    * * 设置弹窗显示与否
    * @param {Boolean} isVisible 控制弹窗是否显示
@@ -80,7 +81,8 @@ export class LoginModal extends Component {
     Login(username, password).then(({ access_token }) => {
       message.success('登录成功！');
       localStorage.setItem('access_token', access_token);
-      window.location.reload();
+      this.props.dispatch({ type: 'SET_TOKEN', payload: access_token });
+      this.controlModal(false);
     });
   }
 
@@ -101,3 +103,5 @@ export class LoginModal extends Component {
     );
   }
 }
+
+export const LoginModal = connect()(_LoginModal);
