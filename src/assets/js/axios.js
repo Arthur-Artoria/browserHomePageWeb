@@ -2,7 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 
 export const Axios = axios.create({
-  baseURL: `${process.env.REACT_APP_API_HOST}`,
+  baseURL: `${process.env.REACT_APP_DEV_API_HOST}`,
   timeout: 5000,
 });
 
@@ -31,8 +31,9 @@ Axios.interceptors.response.use(
  * @param {object} response 错误响应信息
  */
 function catchError(response) {
-  const { status } = response;
-  if (status === 401) unauthorized();
+  const { status, data } = response;
+  if (status === 401) return unauthorized();
+  message.error(data.message);
 }
 
 /**

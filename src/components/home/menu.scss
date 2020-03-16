@@ -33,4 +33,13 @@
       }
     }
   }
+  &-edit {
+    &-dialog {
+      .dialog {
+        &-content {
+          width: 400px;
+        }
+      }
+    }
+  }
 }

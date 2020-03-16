@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import Container from './layout/container/container';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
-import { store } from './store/store';
+import { store } from './redux/store';
 import { Provider } from 'react-redux';
+import 'typeface-roboto';
 
 export default class BasicRouter extends Component {
   render() {

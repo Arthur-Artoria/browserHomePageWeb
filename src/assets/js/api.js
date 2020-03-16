@@ -50,3 +50,12 @@ export function SaveBookmark(bookmark) {
 export function DeleteBookmark(id) {
   return axios.delete(`bookmarks/${id}`);
 }
+
+/**
+ * * 更新书签数据
+ * @param {number} id 待更新书签id
+ * @param {Object} updateBookmarkDto 待更新书签数据
+ */
+export function UpdateBookmark(id, updateBookmarkDto) {
+  return axios.put(`bookmarks/${id}`, updateBookmarkDto)
+}

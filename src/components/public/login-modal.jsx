@@ -68,8 +68,6 @@ export class _LoginModal extends Component {
     form.validateFields((err, values) => {
       if (err) return;
       this.login(values);
-      // form.resetFields();
-      // this.controlModal(false);
     });
   };
 

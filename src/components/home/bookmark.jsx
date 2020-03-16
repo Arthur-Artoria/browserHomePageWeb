@@ -25,7 +25,7 @@ export class _Bookmark extends Component {
     return (
       <div className="bookmark-actions">
         <i
-          onClick={this.handleEditClick.bind(this, id)}
+          onClick={this.handleUpdateClick.bind(this, id)}
           className="material-icons bookmark-actions__icon">
           edit
         </i>
@@ -40,8 +40,18 @@ export class _Bookmark extends Component {
     );
   }
 
-  handleEditClick = id => {};
+  /**
+   * * 点击更改按钮
+   * @param {number} id 待更改书签id
+   */
+  handleUpdateClick = id => {
+    this.props.onUpdateBookmark(id);
+  };
 
+  /**
+   * * 点击删除按钮
+   * @param {number} id 待删除书签id
+   */
   handleDeleteClick = id => {
     DeleteBookmark(id).then(res => {
       this.props.dispatch({ type: 'DELETE_BOOKMARK', payload: id });
@@ -52,6 +62,7 @@ export class _Bookmark extends Component {
   render() {
     const { bookmark } = this.props;
     const { name, href } = bookmark;
+    console.log(name);
     return (
       <Popover
         content={this.bookmarkPopoverContent(bookmark)}

@@ -12,6 +12,10 @@ function reducer(state = { bookmarks: [] }, action) {
       return Object.assign({}, state, { bookmarks: [...payload] })
     case 'DELETE_BOOKMARK':
       return Object.assign({}, state, { bookmarks: bookmarks.filter(({ id }) => id !== payload) })
+    case 'UPDATE_BOOKMARK':
+      return {
+        ...state, bookmarks: bookmarks.map(bookmark => Object.assign(bookmark, bookmark.id === payload.id && payload))
+      }
     case 'SET_TOKEN':
       initAxiosAuth(payload)
       return { ...state, token: payload }

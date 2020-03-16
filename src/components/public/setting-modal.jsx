@@ -51,7 +51,6 @@ const BookmarkCreateForm = Form.create({ name: 'BookmarkCreateForm' })(
 export class SettingModal extends Component {
   constructor(props, context) {
     super(props);
-    console.log(props, context);
   }
 
   /**
