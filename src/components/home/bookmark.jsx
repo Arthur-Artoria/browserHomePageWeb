@@ -62,7 +62,6 @@ export class _Bookmark extends Component {
   render() {
     const { bookmark } = this.props;
     const { name, href } = bookmark;
-    console.log(name);
     return (
       <Popover
         content={this.bookmarkPopoverContent(bookmark)}

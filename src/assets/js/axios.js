@@ -2,7 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 
 export const Axios = axios.create({
-  baseURL: `${process.env.REACT_APP_DEV_API_HOST}`,
+  baseURL: `${process.env.REACT_APP_API_HOST}`,
   timeout: 5000,
 });
 
