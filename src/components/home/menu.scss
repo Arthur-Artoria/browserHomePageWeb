@@ -18,19 +18,20 @@
   &-name {
     margin-bottom: 0;
     font-size: 20px;
+    min-width: 48px;
+    text-align: center;
   }
   &-actions {
     position: absolute;
     top: -8px;
-    right: -8px;
-    &__icon {
-      padding: 3px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 3px;
-      &:hover {
-        background-color: #efefef;
+    right: -12px;
+    &__btn {
+      &.MuiIconButton-root {
+        padding: 5px;
       }
+    }
+    &__icon {
+      font-size: 14px !important;
     }
   }
   &-edit {
@@ -38,6 +39,23 @@
       .dialog {
         &-content {
           width: 400px;
+          .MuiTypography-root {
+            margin-top: 20px;
+          }
+        }
+        &-upload {
+          flex-direction: column;
+          width: 120px;
+          height: 120px;
+          cursor: pointer;
+          border-radius: 50%;
+          &__img {
+            width: 120px;
+            height: 120px;
+          }
+          .MuiIcon-root {
+            margin-bottom: 5px;
+          }
         }
       }
     }

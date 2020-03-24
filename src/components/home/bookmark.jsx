@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Popover, message, Popconfirm } from 'antd';
 import { DeleteBookmark } from '../../assets/js/api';
 import { connect } from 'react-redux';
+import { IconButton, Icon, Avatar } from '@material-ui/core';
 
 export class _Bookmark extends Component {
   /**
@@ -24,17 +25,20 @@ export class _Bookmark extends Component {
   renderBookmarkActons(id) {
     return (
       <div className="bookmark-actions">
-        <i
+        <IconButton
+          className="bookmark-actions__btn"
           onClick={this.handleUpdateClick.bind(this, id)}
-          className="material-icons bookmark-actions__icon">
-          edit
-        </i>
+          aria-label="edit">
+          <Icon className="bookmark-actions__icon">edit</Icon>
+        </IconButton>
         <Popconfirm
           title="确定删除吗？"
           okText="确定"
           cancelText="取消"
           onConfirm={this.handleDeleteClick.bind(this, id)}>
-          <i className="material-icons bookmark-actions__icon">delete</i>
+          <IconButton className="bookmark-actions__btn" aria-label="delete">
+            <Icon className="bookmark-actions__icon">delete</Icon>
+          </IconButton>
         </Popconfirm>
       </div>
     );
@@ -59,10 +63,19 @@ export class _Bookmark extends Component {
     });
   };
 
+  /**
+   * * 渲染书签内容
+   * @param {object} bookmark 书签
+   */
+  renderBookmarkCover(bookmark) {
+    const { cover, name } = bookmark;
+    if (!cover) return name.slice(0, 1);
+    return <Avatar src={cover} className="bookmark-cover" />;
+  }
+
   render() {
     const { bookmark } = this.props;
-    const { name, href } = bookmark;
-    console.log(name);
+    const { href } = bookmark;
     return (
       <Popover
         content={this.bookmarkPopoverContent(bookmark)}
@@ -73,7 +86,7 @@ export class _Bookmark extends Component {
           target="_blank"
           shape="circle"
           className="bookmark-cover">
-          {name.slice(0, 1)}
+          {this.renderBookmarkCover(bookmark)}
         </Button>
       </Popover>
     );
