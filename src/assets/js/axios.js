@@ -32,14 +32,16 @@ Axios.interceptors.response.use(
  */
 function catchError(response) {
   const { status, data } = response;
-  if (status === 401) return unauthorized();
+  if (status === 401) return unauthorized(response);
   message.error(data.message);
 }
 
 /**
  * * 登录过期处理
  */
-function unauthorized() {
+function unauthorized(response) {
+  const { data } = response;
+  if (data.message) return message.error(data.message);
   const access_token = localStorage.getItem('access_token');
   message.warning(access_token ? '您的登录已过期，请重新登录！' : '请先登录！');
   localStorage.removeItem('access_token');
