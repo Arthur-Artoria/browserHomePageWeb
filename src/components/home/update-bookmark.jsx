@@ -20,16 +20,15 @@ import {
 } from '../../assets/js/api';
 import { message, Upload } from 'antd';
 
-/**
- * @todo 原有图片无法显示
- */
-export class _UpdateBookmark extends Component {
+class _UpdateBookmark extends Component {
   form = {
     name: {
-      value: ''
+      value: '',
+      error: false
     },
     href: {
-      value: ''
+      value: '',
+      error: false
     }
   };
 
@@ -44,8 +43,21 @@ export class _UpdateBookmark extends Component {
 
   state = {
     cover: null,
-    tempImg: null
+    tempImg: null,
+    formError: {
+      name: false,
+      href: false
+    }
   };
+
+  bookmark = null;
+
+  componentDidUpdate(prevProps) {
+    const { visible, action } = this.props;
+    if (visible !== prevProps.visible && visible && action === 'update') {
+      this.initState(this.bookmark);
+    }
+  }
 
   /**
    * * 判断对话框功能
@@ -56,12 +68,37 @@ export class _UpdateBookmark extends Component {
       const { bookmarkId, bookmarks } = this.props;
       return this.getBookmark(bookmarkId, bookmarks);
     } else if (action === 'create') {
-      const {
-        name: { value: name },
-        href: { value: href }
-      } = this.form;
-      return { name, href };
+      return { name: null, href: null };
     }
+  }
+
+  /**
+   * * 获取当前更改的书签信息
+   * @param {number} bookmarkId 当前更改的书签的id
+   * @param {any[]} bookmarks 书签列表
+   */
+  getBookmark(bookmarkId, bookmarks) {
+    const bookmark = bookmarks.find(({ id }) => bookmarkId === id) || {};
+    this.bookmark = bookmark;
+    return bookmark || {};
+  }
+
+  /**
+   * * 根据原书签信息初始化state
+   * @param {object} bookmark 书签信息
+   * @param {string} bookmark.cover 书签封面
+   * @param {string} bookmark.coverName 书签封面图片真实名称
+   * @param {string} bookmark.href 书签链接
+   * @param {string} bookmark.name 书签名称
+   */
+  initState({ cover, coverName, href, name }) {
+    this.form.name.value = name;
+    this.form.href.value = href;
+    if (!cover) return;
+    this.setState({
+      tempImg: cover,
+      cover: coverName
+    });
   }
 
   /**
@@ -132,19 +169,13 @@ export class _UpdateBookmark extends Component {
   };
 
   /**
-   * * 获取当前更改的书签信息
-   * @param {number} bookmarkId 当前更改的书签的id
-   * @param {any[]} bookmarks 书签列表
-   */
-  getBookmark(bookmarkId, bookmarks) {
-    const bookmark = bookmarks.find(({ id }) => bookmarkId === id);
-    return bookmark || {};
-  }
-
-  /**
    * * 点击确定
    */
   handleOkClick = () => {
+    Object.keys(this.state.formError).forEach(this.handleInputBlur);
+    const { formError } = this.state;
+    if (formError.name || formError.href) return;
+
     const { action } = this.props;
     const {
       name: { value: name },
@@ -165,6 +196,7 @@ export class _UpdateBookmark extends Component {
    */
   handleInputChange = (type, { target: { value } }) => {
     this.form[type].value = value;
+    this.handleInputBlur(type);
   };
 
   /**
@@ -209,7 +241,14 @@ export class _UpdateBookmark extends Component {
   renderUpdateContent() {
     const { tempImg } = this.state;
     if (tempImg) {
-      return <Avatar src={tempImg} className="dialog-upload__img" />;
+      return (
+        <Paper elevation={0} className="dialog-avatar">
+          <Avatar src={tempImg} className="dialog-avatar__img" />
+          <Paper elevation={0} className="dialog-avatar__hover flex-center">
+            <Icon>edit</Icon>
+          </Paper>
+        </Paper>
+      );
     } else {
       return (
         <Paper variant="outlined" className="dialog-upload flex-center" square>
@@ -220,11 +259,23 @@ export class _UpdateBookmark extends Component {
     }
   }
 
+  /**
+   * * 鼠标移出焦点监听
+   * @param {string} type 输入框字段
+   * @returns {Boolean} isError
+   */
+  handleInputBlur = type => {
+    const { value } = this.form[type];
+    const { formError } = this.state;
+    formError[type] = !value;
+    this.setState({ formError });
+    return formError[type];
+  };
+
   render() {
     const { visible, action } = this.props;
     const { name, href } = this.getAction();
-    this.form.name.value = name;
-    this.form.href.value = href;
+    const { formError } = this.state;
     return (
       <Dialog
         className="bookmark-edit-dialog"
@@ -233,22 +284,28 @@ export class _UpdateBookmark extends Component {
         <DialogTitle>修改书签</DialogTitle>
         <DialogContent className="dialog-content">
           <TextField
-            autoFocus
             required
+            fullWidth
+            autoFocus
             type="text"
             label="书签名称"
             defaultValue={name}
+            error={formError.name}
+            onBlur={this.handleInputBlur.bind(this, 'name')}
+            helperText={'书签名称不得为空！'}
             onChange={this.handleInputChange.bind(this, 'name')}
-            fullWidth
           />
           <TextField
             required
+            fullWidth
             type="text"
             margin="normal"
             label="书签地址"
             defaultValue={href}
+            error={formError.href}
+            onBlur={this.handleInputBlur.bind(this, 'href')}
+            helperText={'书签地址不得为空！'}
             onChange={this.handleInputChange.bind(this, 'href')}
-            fullWidth
           />
           {/* 图标设置 */}
           <Typography variant="body1" display="block" gutterBottom>

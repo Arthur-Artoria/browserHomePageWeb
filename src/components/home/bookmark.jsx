@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Popover, message, Popconfirm } from 'antd';
+import { Popover, message, Popconfirm } from 'antd';
 import { DeleteBookmark } from '../../assets/js/api';
 import { connect } from 'react-redux';
-import { IconButton, Icon, Avatar } from '@material-ui/core';
+import { Button, IconButton, Icon, Avatar } from '@material-ui/core';
 
 export class _Bookmark extends Component {
   /**
@@ -82,9 +82,10 @@ export class _Bookmark extends Component {
         className="bookmark">
         <Button
           href={href}
-          size="large"
-          target="_blank"
           shape="circle"
+          color="primary"
+          target="_blank"
+          variant="contained"
           className="bookmark-cover">
           {this.renderBookmarkCover(bookmark)}
         </Button>
