@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './actions.scss';
 import { SettingModalContainer } from './setting-modal';
 import { LoginModal } from './login-modal';
-
+import { LoginModalHook } from './login-modal-hook';
 export class Actions extends Component {
   state = {
     isVisibleSettingModal: false,
@@ -70,9 +70,14 @@ export class Actions extends Component {
         />
 
         {/* 登录 对话框 */}
-        <LoginModal
+        {/* <LoginModal
           onVisibleChange={this.controlModal.bind(this, 'user')}
           visible={this.state.actionList.user.isVisibleModal}
+        /> */}
+
+        <LoginModalHook
+          visible={this.state.actionList.user.isVisibleModal}
+          onVisibleChange={this.controlModal.bind(this, 'user')}
         />
       </div>
     );
