@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import zhCN from 'antd/es/locale/zh_CN';
 import { store } from './redux/store';
 import Home from './views/home';
-import Users from './views/uses';
 import 'typeface-roboto';
+import { Setting } from './views/setting';
 
 export default class BasicRouter extends Component {
   render() {
@@ -18,7 +18,7 @@ export default class BasicRouter extends Component {
             <Router>
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/users" component={Users} />
+                <Route exact path="/setting" component={Setting} />
               </Switch>
             </Router>
           </Container>
