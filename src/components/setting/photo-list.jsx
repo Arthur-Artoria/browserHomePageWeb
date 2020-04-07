@@ -1,7 +1,12 @@
 import React from 'react';
-import { GridList, GridListTile } from '@material-ui/core';
+import './photo-list.scss';
+import { GridList, GridListTile, Typography } from '@material-ui/core';
 import { Upload, message } from 'antd';
 import { generateUUID } from '../../assets/js/tools';
+import BackupRoundedIcon from '@material-ui/icons/BackupRounded';
+import AddRoundedIcon from '@material-ui/icons/AddRounded';
+
+const { Dragger } = Upload;
 
 export const PhotoList = props => {
   /**
@@ -39,15 +44,26 @@ export const PhotoList = props => {
   };
 
   return (
-    <GridList cellHeight="160" cols={3}>
-      <GridListTile>
-        <Upload
+    <GridList
+      className="setting-photo photo-list"
+      cellHeight={226}
+      cols={5}
+      spacing={20}>
+      <GridListTile className="photo-item">
+        <Dragger
           name="file"
-          showUploadList={false}
+          multiple={true}
           data={setUpdateData}
+          showUploadList={false}
           onChange={handleUpdateChange}
+          className="photo-item__upload"
           beforeUpload={handleBeforeUpload}
-          action={`${process.env.REACT_APP_API_HOST}/oss/upload`}></Upload>
+          action={`${process.env.REACT_APP_API_HOST}/oss/upload`}>
+          <BackupRoundedIcon className="upload-svg" />
+          <Typography className="upload-tip" variant="body1" gutterBottom>
+            将图片拖拽至此即可上传
+          </Typography>
+        </Dragger>
       </GridListTile>
     </GridList>
   );

@@ -1,85 +1,85 @@
 import React, { Component } from 'react';
 import './actions.scss';
-import { SettingModalContainer } from './setting-modal';
-import { LoginModal } from './login-modal';
 import { LoginModalHook } from './login-modal-hook';
-export class Actions extends Component {
-  state = {
-    isVisibleSettingModal: false,
-    actionList: {
-      user: {
-        icon: 'account_circle',
-        isVisibleModal: false,
-        handleClick: 'handleUserClick'
-      },
-      setting: {
-        icon: 'settings',
-        isVisibleModal: false,
-        handleClick: 'controlModal'
+import { IconButton, Icon } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+
+export const Actions = withRouter(
+  class Actions extends Component {
+    state = {
+      isVisibleSettingModal: false,
+      actionList: {
+        user: {
+          icon: 'account_circle',
+          isVisibleModal: false,
+          handleClick: 'handleUserClick'
+        },
+        setting: {
+          icon: 'settings',
+          isVisibleModal: false,
+          route: '/setting',
+          handleClick: 'handleSettingClick'
+        }
       }
-    }
-  };
+    };
 
-  /**
-   * * 设置弹窗显示与否
-   * @param {string} modal 弹窗的名称
-   * @param {Boolean} isVisible 控制弹窗是否显示
-   */
-  controlModal = (modal, isVisible = true) => {
-    const { actionList } = this.state;
-    actionList[modal].isVisibleModal = !!isVisible;
-    this.setState({ actionList });
-  };
+    /**
+     * * 设置弹窗显示与否
+     * @param {string} modal 弹窗的名称
+     * @param {Boolean} isVisible 控制弹窗是否显示
+     */
+    controlModal = (modal, isVisible = true) => {
+      const { actionList } = this.state;
+      actionList[modal].isVisibleModal = !!isVisible;
+      this.setState({ actionList });
+    };
 
-  /**
-   * * 点击用户按钮
-   */
-  handleUserClick = () => {
-    this.controlModal('user');
-  };
+    /**
+     * * 点击用户按钮
+     */
+    handleUserClick = () => {
+      this.controlModal('user');
+    };
 
-  /**
-   * * 渲染操作按钮列表
-   */
-  renderActionList = () => {
-    const { actionList } = this.state;
-    return Object.keys(actionList).map((key, index) => {
-      const { icon, handleClick } = actionList[key];
+    /**
+     * * 点击设置按钮
+     */
+    handleSettingClick = key => {
+      const { route } = this.state.actionList[key];
+      this.props.history.push(route);
+    };
 
+    /**
+     * * 渲染操作按钮列表
+     */
+    renderActionList = () => {
+      const { actionList } = this.state;
+      return Object.keys(actionList).map((key, index) => {
+        const { icon, handleClick } = actionList[key];
+
+        return (
+          // 按钮
+          <IconButton
+            key={index}
+            className="actions-icon"
+            onClick={handleClick && this[handleClick].bind(this, key)}>
+            <Icon>{icon}</Icon>
+          </IconButton>
+        );
+      });
+    };
+
+    render() {
       return (
-        // 按钮
-        <i
-          key={index}
-          onClick={this[handleClick].bind(this, key)}
-          className="material-icons actions-icon">
-          {icon}
-        </i>
+        <div id="actions">
+          {this.renderActionList()}
+
+          <LoginModalHook
+            visible={this.state.actionList.user.isVisibleModal}
+            onVisibleChange={this.controlModal.bind(this, 'user')}
+          />
+        </div>
       );
-    });
-  };
-
-  render() {
-    return (
-      <div id="actions">
-        {this.renderActionList()}
-
-        {/* 设置 对话框 */}
-        <SettingModalContainer
-          onVisibleChange={this.controlModal.bind(this, 'setting')}
-          visible={this.state.actionList.setting.isVisibleModal}
-        />
-
-        {/* 登录 对话框 */}
-        {/* <LoginModal
-          onVisibleChange={this.controlModal.bind(this, 'user')}
-          visible={this.state.actionList.user.isVisibleModal}
-        /> */}
-
-        <LoginModalHook
-          visible={this.state.actionList.user.isVisibleModal}
-          onVisibleChange={this.controlModal.bind(this, 'user')}
-        />
-      </div>
-    );
+    }
   }
-}
+);
