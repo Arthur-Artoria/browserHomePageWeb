@@ -46,7 +46,13 @@ export const Actions = withRouter(
      */
     handleSettingClick = key => {
       const { route } = this.state.actionList[key];
-      this.props.history.push(route);
+      const {
+        history,
+        history: {
+          location: { pathname }
+        }
+      } = this.props;
+      pathname.includes(route) ? history.push('/') : history.push(route);
     };
 
     /**

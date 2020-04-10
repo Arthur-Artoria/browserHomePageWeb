@@ -1,6 +1,14 @@
 import React from 'react';
-import { GridListTile } from '@material-ui/core';
+import { Paper, CircularProgress } from '@material-ui/core';
 
 export const Photo = props => {
-  return <GridListTile>11111</GridListTile>;
+  const { progress, photo, percent } = props;
+
+  return (
+    <>
+      <Paper className="photo-item__inner flex-center">
+        <CircularProgress variant="static" value={Math.round(percent)} />
+      </Paper>
+    </>
+  );
 };
