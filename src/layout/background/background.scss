@@ -7,6 +7,7 @@
     left: 0;
     opacity: 0;
     transition: opacity 18s;
+    background-color: #000;
     &.activeBack {
       opacity: 1;
     }

@@ -12,6 +12,14 @@
   align-items: center;
   justify-content: center;
 }
+.img-container {
+  overflow: hidden;
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
 body .ant-message {
   z-index: 9999;
 }

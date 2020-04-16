@@ -59,3 +59,30 @@ export function DeleteBookmark(id) {
 export function UpdateBookmark(id, updateBookmarkDto) {
   return axios.put(`bookmarks/${id}`, updateBookmarkDto)
 }
+
+/**
+ * * 获取图片列表
+ */
+export function GetPhotos() {
+  return axios.get('photos');
+}
+
+export function GetBingPhotos() {
+  return axios.get('photos/bing')
+}
+
+/**
+ * * 保存背景图片
+ * @param {string} name photo oss 名称
+ */
+export function SavePhoto(name) {
+  return axios.post(`photos`, { name })
+}
+
+/**
+ * * 删除背景图片
+ * @param {number} id 背景图片id
+ */
+export function DeletePhoto(id) {
+  return axios.delete(`photos/${id}`);
+}

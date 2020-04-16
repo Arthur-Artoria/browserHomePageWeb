@@ -1,8 +1,10 @@
+//@ts-check
+
 import { createStore } from 'redux';
 import { initAxiosAuth } from '../assets/js/api';
 
-function reducer(state = { bookmarks: [] }, action) {
-  const { bookmarks } = state;
+function reducer(state = {}, action) {
+  const { bookmarks = [], photos = [] } = state;
   const { type, payload } = action;
 
   switch (type) {
@@ -19,9 +21,19 @@ function reducer(state = { bookmarks: [] }, action) {
     case 'SET_TOKEN':
       initAxiosAuth(payload)
       return { ...state, token: payload }
+
+    case 'SET_PHOTOS':
+      return { ...state, photos: payload }
+
+    case 'PUSH_PHOTOS':
+      return { ...state, photos: [...photos, payload] }
+
+    case 'DELETE_PHOTO':
+      return { ...state, photos: photos.filter(({ id }) => id !== payload) }
+
     default:
       return state;
   }
 }
 
-export const store = createStore(reducer, { bookmarks: [], token: localStorage.getItem('access_token') });
+export const store = createStore(reducer, { bookmarks: [], photos: [], token: localStorage.getItem('access_token') });
