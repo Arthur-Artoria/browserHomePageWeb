@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './photo-list.scss';
 import { GridList, GridListTile } from '@material-ui/core';
 import { PhotoUpload } from './photo-upload';
 import { Photo } from './photo';
+import { useSelector } from 'react-redux';
 
 export const PhotoList = props => {
   const [photos, setPhotos] = useState([]);
+  const statePhotos = useSelector(state => state.photos);
 
-  /**
-   * * 文件上传开始回调
-   * @param {object} info 上传信息
-   * @param {any[]} info.fileList 上传文件列表
-   */
-  const handleUploadBegin = ({ fileList }) => {
-    setPhotos(fileList);
-  };
+  useEffect(() => {
+    let isInit = true;
+    isInit && setPhotos(statePhotos);
+    // return () => {
+    //   isInit = false;
+    // };
+  }, [statePhotos]);
 
   /**
    * * 上传进度改变回调
@@ -22,7 +23,13 @@ export const PhotoList = props => {
    * @param {any[]} info.fileList 上传文件列表
    */
   const handleProgressChange = ({ fileList }) => {
-    setPhotos(fileList.map(({ uid, percent }) => ({ uid, percent })));
+    setPhotos([
+      ...fileList.map(({ uid, percent, response = {} }) => {
+        const { img } = response;
+        return { uid, percent, name: img };
+      }),
+      ...statePhotos
+    ]);
   };
 
   /**
@@ -30,9 +37,9 @@ export const PhotoList = props => {
    * @param {any[]} photos 图片数组
    */
   const renderPhotos = photos => {
-    return photos.map(({ uid, name, percent, src }) => (
+    return photos.map(({ id, uid, name, percent, thumb }) => (
       <GridListTile className="photo-item" key={name || uid}>
-        <Photo photo={src} percent={percent} />
+        <Photo id={id} photo={thumb} percent={percent} />
       </GridListTile>
     ));
   };
@@ -40,18 +47,12 @@ export const PhotoList = props => {
   return (
     <GridList
       className="setting-photo photo-list"
-      cellHeight={226}
+      cellHeight={224}
       cols={5}
       spacing={20}>
       {renderPhotos(photos)}
-      {/* <GridListTile className="photo-item" key="test">
-        <Photo progress={20} />
-      </GridListTile> */}
       <GridListTile key="upload" className="photo-item">
-        <PhotoUpload
-          onUploadBegin={handleUploadBegin}
-          onProgressChange={handleProgressChange}
-        />
+        <PhotoUpload onProgressChange={handleProgressChange} />
       </GridListTile>
     </GridList>
   );

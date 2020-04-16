@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import './background.scss';
 import Image from './image';
-export class Background extends Component {
+import { GetPhotos, GetBingPhotos } from '../../assets/js/api';
+import { connect } from 'react-redux';
+import { mapReduxState } from '../../assets/js/tools';
+export class _Background extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeImageIndex: 0 // 激活显示的图片在随机列表中的下标值
     };
     this.setRandomBackground = this.setRandomBackground.bind(this);
-    this.setBackground();
+    this.getPhotos();
   }
 
   /** @type {Array<number>} */
@@ -17,17 +20,15 @@ export class Background extends Component {
   /** @type {Array<number>} */
   imgList = []; // 全部图片列表
 
-  componentDidMount() {
-    setTimeout(() => {
-      const nextActiveImageIndex = this.state.activeImageIndex === 0 ? 1 : 0;
-      this.setState({ activeImageIndex: nextActiveImageIndex });
-    }, 2000);
-
-    this.randomBackTimer = setInterval(
-      this.setRandomBackground,
-      20000,
-      this.imgList
-    );
+  componentDidUpdate(prevProps) {
+    const { token, photos } = this.props;
+    if (token && token !== prevProps.token) {
+      this.getPhotos();
+    }
+    if (photos.length !== prevProps.photos.length) {
+      this.setRandomBackground(photos);
+      this.initRandomTimer(photos);
+    }
   }
 
   componentWillUnmount() {
@@ -35,54 +36,67 @@ export class Background extends Component {
   }
 
   /**
-   * * 获取图片列表
-   * @param {number} imgListLength 图片列表的长度
-   * @returns {Array<number>} imgList 图片名称列表
+   * * 获取背景图片
    */
-  getBackgroundImageList(imgListLength) {
-    const imgList = [];
-    let imgCount = 0;
-    while (imgCount < imgListLength) {
-      imgList.push(++imgCount);
-    }
-
-    return imgList;
+  getPhotos() {
+    GetPhotos().then(
+      photos => {
+        this.props.dispatch({
+          type: 'SET_PHOTOS',
+          payload: photos.filter(({ name }) => name !== '0')
+        });
+      },
+      err => {
+        this.getBingPhotos();
+      }
+    );
   }
 
   /**
-   * * 设置背景图
+   * * 获取必应图片
    */
-  setBackground() {
-    const imgList = this.getBackgroundImageList(26);
-    this.imgList = imgList;
-    for (let index = 0; index < 2; index++) {
-      this.randomImageList.push(this.getRandomImage(imgList));
-    }
+  getBingPhotos() {
+    GetBingPhotos().then(({ images }) => {
+      this.props.dispatch({
+        type: 'SET_PHOTOS',
+        payload: images.map(({ url }) => ({
+          name: `https://cn.bing.com${url}`
+        }))
+      });
+    });
+  }
+
+  /**
+   * * 初始化计时器
+   */
+  initRandomTimer(photos) {
+    clearInterval(this.randomBackTimer);
+    this.randomBackTimer = setInterval(this.setRandomBackground, 20000, photos);
   }
 
   /**
    * * 获取已有随机列表中不包含的随机图片名称
-   * @param {Array<number>} imgList 全部图片列表
-   * @returns {number} random 获取的随机图片名称
+   * @param {any[]>} imgList 全部图片列表
+   * @returns {string} random 获取的随机图片名称
    */
   getRandomImage(imgList) {
-    let random = imgList[Math.floor(Math.random() * imgList.length)];
+    if (!imgList.length) return '';
+    let random = imgList[Math.floor(Math.random() * imgList.length)].name;
     while (this.randomImageList.includes(random)) {
-      random = imgList[Math.floor(Math.random() * imgList.length)];
+      random = imgList[Math.floor(Math.random() * imgList.length)].name;
     }
     return random;
   }
 
   /**
    * * 随机显示背景图
-   * @param {Array<number>} imgList 图片列表
+   * @param {any[]} imgList 图片列表
    * @returns {function}
    */
   setRandomBackground(imgList) {
     const { activeImageIndex } = this.state;
     const nextActiveImageIndex = activeImageIndex === 0 ? 1 : 0;
     const random = this.getRandomImage(imgList);
-
     this.randomImageList[nextActiveImageIndex] = random;
     this.setState({ activeImageIndex: nextActiveImageIndex });
 
@@ -105,19 +119,17 @@ export class Background extends Component {
     return (
       <div id="background">
         {/* 背景1 */}
-        <Image
-          imageName={first}
-          imgList={this.imgList}
-          isActive={activeImageIndex === 0}
-        />
+        <Image imageName={first} isActive={activeImageIndex === 0} />
 
         {/* 背景2 */}
-        <Image
-          imageName={second}
-          imgList={this.imgList}
-          isActive={activeImageIndex === 1}
-        />
+        <Image imageName={second} isActive={activeImageIndex === 1} />
       </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return mapReduxState(state, ['token', 'photos']);
+}
+
+export const Background = connect(mapStateToProps)(_Background);

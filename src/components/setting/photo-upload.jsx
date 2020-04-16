@@ -3,17 +3,24 @@ import { Typography } from '@material-ui/core';
 import { Upload, message } from 'antd';
 import { generateUUID } from '../../assets/js/tools';
 import BackupRoundedIcon from '@material-ui/icons/BackupRounded';
+import { SavePhoto } from '../../assets/js/api';
+import { useDispatch } from 'react-redux';
 
 const { Dragger } = Upload;
 
 export const PhotoUpload = props => {
+  const dispatch = useDispatch();
+
   /**
    * * 设置上传所需额外数据
    * @param {object} file 上传文件信息
    */
   const setUpdateData = file => {
     const { name } = file;
-    return { fileName: `/background/${generateUUID()}${name}` };
+    return {
+      fileName: `/background/${generateUUID()}${name}`,
+      process: 'image/resize,w_500'
+    };
   };
 
   /**
@@ -35,25 +42,10 @@ export const PhotoUpload = props => {
    */
   const handleUpdateChange = info => {
     const {
-      event,
-      file: { response, status }
+      file: { status, response }
     } = info;
-
-    if (!event && !response) props.onUploadBegin(info);
-
-    formatUpdateEvent(info);
-    if (status === 'done') handleUploadSuccess(response);
-  };
-
-  /**
-   * * 处理图片上传事件
-   * @param {object} info 上传信息
-   */
-  const formatUpdateEvent = info => {
-    const { event = {} } = info;
-    const { type } = event;
-    if (type !== 'progress') return;
     props.onProgressChange(info);
+    if (status === 'done') handleUploadSuccess(response);
   };
 
   /**
@@ -61,7 +53,15 @@ export const PhotoUpload = props => {
    * @param {object} response 上传成功返回信息
    */
   const handleUploadSuccess = ({ name, img }) => {
-    console.log(name, img);
+    SavePhoto(name).then(({ id }) => {
+      dispatch({
+        type: 'PUSH_PHOTO',
+        payload: {
+          id,
+          name: img
+        }
+      });
+    });
   };
 
   return (

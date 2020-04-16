@@ -45,6 +45,10 @@ export const Actions = withRouter(
      * * 点击设置按钮
      */
     handleSettingClick = key => {
+      const { access_token } = localStorage;
+
+      if (!access_token) return this.controlModal('user');
+
       const { route } = this.state.actionList[key];
       const {
         history,
