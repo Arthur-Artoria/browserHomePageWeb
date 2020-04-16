@@ -14,14 +14,14 @@ export default class BasicRouter extends Component {
     return (
       <ConfigProvider locale={zhCN}>
         <Provider store={store}>
-          <Container>
-            <Router>
+          <Router>
+            <Container>
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/setting" component={Setting} />
               </Switch>
-            </Router>
-          </Container>
+            </Container>
+          </Router>
         </Provider>
       </ConfigProvider>
     );
