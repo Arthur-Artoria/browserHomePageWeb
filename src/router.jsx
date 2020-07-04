@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import zhCN from 'antd/es/locale/zh_CN';
 import { store } from './redux/store';
 import Home from './views/home';
-import 'typeface-roboto';
 import { Setting } from './views/setting';
 
 export default class BasicRouter extends Component {
